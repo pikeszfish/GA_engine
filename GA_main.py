@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from PIL import Image, ImageDraw
+import numpy as np
 from numpy import *
 import time
+path1 = '/Users/pike/CODES/GA_engine/'
 
 def creat_test(i):
     size = (255, 255)
@@ -22,7 +24,7 @@ def creat_test(i):
                         fill = (single_gene[6], single_gene[7], single_gene[8], 120))
         base_img = Image.alpha_composite(base_img, img)
     print ("/home/conplat/GA_engine/test_%d.png"%i)
-    base_img.save("/home/conplat/GA_engine/test_%d.png"%i)
+    base_img.save(path1 + "test_%d.png"%i)
 
 def creat_one_pic(generation, gene_num, size, i):
     single = generation[1]
@@ -39,7 +41,7 @@ def creat_one_pic(generation, gene_num, size, i):
                         fill = (single_gene[6], single_gene[7], single_gene[8], 120))
         base_img = Image.alpha_composite(base_img, img)
     print ("/home/conplat/GA_engine_%d.png"%i)
-    base_img.save("/home/conplat/GA_engine/aa_%d.png"%i)
+    base_img.save(path1 + "aa_%d.png"%i)
 
 def mutate_or_not(rate):
     if rate > random.random():
@@ -67,8 +69,8 @@ def crossover_generation_complex(generation, generation_num, gene_num, gene_muta
         m = array(m_genes[0])
         for i in range(1, gene_num):
             if mutate_or_not(gene_mutation_rate):
-                f_genes[i] = hstack((random.randint(0, 100, (1, 6)), random.randint(0, 100, (1, 4))))
-                m_genes[i] = hstack((random.randint(0, 100, (1, 6)), random.randint(0, 100, (1, 4))))
+                f_genes[i] = hstack((random.randint(0, 100, (1, 6)), random.randint(0, 255, (1, 4))))
+                m_genes[i] = hstack((random.randint(0, 100, (1, 6)), random.randint(0, 255, (1, 4))))
             if f_or_m():
                 f = vstack((f, f_genes[i]))
                 m = vstack((m, m_genes[i]))
@@ -102,8 +104,9 @@ def calc_rate(target_img, generation, generation_num, gene_num, size):
             img = Image.new('RGBA', size)
             draw = ImageDraw.Draw(img)
             single_gene = genes[j]
-            draw.polygon([(single_gene[0], single_gene[1]), (single_gene[2], single_gene[3]), (single_gene[4],single_gene[5])],\
-                            fill = (single_gene[6], single_gene[7], single_gene[8], 120))
+            draw.polygon([(single_gene[0], single_gene[1]), (single_gene[2], single_gene[3]), \
+                          (single_gene[4],single_gene[5])],\
+                            fill = (single_gene[6], single_gene[7], single_gene[8], single_gene[9]))
             base_img = Image.alpha_composite(base_img, img)
         t2 = time.time()
         generation[i]["rate"] = abs(sum((array(base_img) - target_img)))
@@ -121,11 +124,12 @@ def main():
     generation_num = 120
     gene_num = 100
     generation = []
-    select_rate = 0.1
+    kick_out_rate = 0.2
+    copy_rate = 0.15
     gene_mutation_rate = 0.05
     size = (100, 100)
     size_1 = (size[0] - 1, size[1] - 1)
-    img_path = "/home/conplat/GA_engine/bb.png"
+    img_path = "/Users/pike/CODES/GA_engine/bb.png"
     target_img = array(Image.open(img_path).resize(size).convert('RGBA'))
     init_generation(generation, generation_num, gene_num, size)
 
@@ -145,8 +149,8 @@ def main():
             print (str(generation[0]))
         # for i in range(0, generation_num):
         #     print (generation[i]["rate"])
-        kick_out = int(generation_num * select_rate)
-        copy_best = int(generation_num * select_rate * 2)
+        kick_out = int(generation_num * kick_out_rate)
+        copy_best = int(generation_num * copy_rate * 1)
         select_generation(generation, generation_num, kick_out, copy_best)
         crossover_generation_complex(generation, generation_num, gene_num, gene_mutation_rate)
         print (len(generation))
