@@ -6,6 +6,35 @@ import numpy as np
 from numpy import *
 import time
 path1 = '/Users/pike/CODES/GA_engine/'
+def alpha_composite(src, dst):
+    '''
+    Return the alpha composite of src and dst.
+
+    Parameters:
+    src -- PIL RGBA Image object
+    dst -- PIL RGBA Image object
+
+    The algorithm comes from http://en.wikipedia.org/wiki/Alpha_compositing
+    '''
+    # http://stackoverflow.com/a/3375291/190597
+    # http://stackoverflow.com/a/9166671/190597
+    src = asarray(src)
+    dst = asarray(dst)
+    out = empty(src.shape, dtype = 'float')
+    alpha = index_exp[:, :, 3:]
+    rgb = index_exp[:, :, :3]
+    src_a = src[alpha]/255.0
+    dst_a = dst[alpha]/255.0
+    out[alpha] = src_a+dst_a*(1-src_a)
+    old_setting = seterr(invalid = 'ignore')
+    out[rgb] = (src[rgb]*src_a + dst[rgb]*dst_a*(1-src_a))/out[alpha]
+    seterr(**old_setting)
+    out[alpha] *= 255
+    clip(out,0,255)
+    # astype('uint8') maps nan (and inf) to 0
+    out = out.astype('uint8')
+    out = Image.fromarray(out, 'RGBA')
+    return out
 
 def creat_test(i):
     size = (255, 255)
@@ -104,9 +133,10 @@ def calc_rate(target_img, generation, generation_num, gene_num, size):
             img = Image.new('RGBA', size)
             draw = ImageDraw.Draw(img)
             single_gene = genes[j]
-            draw.polygon([(single_gene[0], single_gene[1]), (single_gene[2], single_gene[3]), \
-                          (single_gene[4],single_gene[5])],\
-                            fill = (single_gene[6], single_gene[7], single_gene[8], single_gene[9]))
+            draw.polygon([(single_gene[0], single_gene[1]), \
+                          (single_gene[2], single_gene[3]), \
+                          (single_gene[4],single_gene[5])], \
+                          fill = (single_gene[6], single_gene[7], single_gene[8], single_gene[9]))
             base_img = Image.alpha_composite(base_img, img)
         t2 = time.time()
         generation[i]["rate"] = abs(sum((array(base_img) - target_img)))
