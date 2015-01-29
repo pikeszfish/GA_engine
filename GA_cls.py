@@ -12,7 +12,7 @@ class Color(object):
         self.r = r.randint(0, 255)
         self.g = r.randint(0, 255)
         self.b = r.randint(0, 255)
-        self.a = 110
+        self.a = 85
 
 
 class Triangle(object):
@@ -41,7 +41,7 @@ def mutate_or_not(rate):
 
 
 class Canvas(object):
-    mutate_rate = 0.06
+    mutate_rate = 0.1
     size = (256, 256)
     size_1 = (255, 255)
     target_pixels = []
@@ -90,16 +90,16 @@ class Canvas(object):
                                delta_blue  * delta_blue
 
     def draw_it(self, i):
-        self.img.save("/home/conplat/GA_engine/GA_cls_%d.png"%i)
+        self.img.save("/home/conplat/GA_engine/cc%d.png"%i)
 
 
 def main():
-    img_path = "/home/conplat/GA_engine/bb.png"
+    img_path = "/home/conplat/GA_engine/cc.png"
     img = Image.open(img_path).convert('RGBA')
     target_img = [img.getpixel((x, y)) for x in range(0, 255, 2) for y in range(0, 255, 2)]
     Canvas.target_pixels = target_img
     parent = Canvas()
-    parent.add_triangles(120)
+    parent.add_triangles(40)
     i = 0
     while True:
         child = Canvas()
@@ -112,7 +112,7 @@ def main():
         parent = parent if parent.match_rate < child.match_rate else child
         child = None
         i += 1
-        if i % 400 == 0:
+        if i % 1000 == 0:
             parent.draw_it(i)
 
 

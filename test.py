@@ -1,6 +1,17 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 # import Image
 from PIL import Image, ImageDraw
 import numpy as np
+
+
+def compare():
+    h1 = Image.open("image1").histogram()
+    h2 = Image.open("image2").histogram()
+
+    rms = math.sqrt(reduce(operator.add,
+        map(lambda a,b: (a-b)**2, h1, h2))/len(h1))
 
 def alpha_to_color(image, color=(255, 255, 255)):
     """Set all fully transparent pixels of an RGBA image to the specified color.
