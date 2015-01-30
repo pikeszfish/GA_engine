@@ -3,7 +3,6 @@
 
 from PIL import Image, ImageDraw
 import random as r
-import numpy as np
 import time
 
 
@@ -12,7 +11,7 @@ class Color(object):
         self.r = r.randint(0, 255)
         self.g = r.randint(0, 255)
         self.b = r.randint(0, 255)
-        self.a = 85
+        self.a = 100
 
 
 class Triangle(object):
@@ -41,7 +40,7 @@ def mutate_or_not(rate):
 
 
 class Canvas(object):
-    mutate_rate = 0.1
+    mutate_rate = 0.03
     size = (256, 256)
     size_1 = (255, 255)
     target_pixels = []
@@ -50,7 +49,6 @@ class Canvas(object):
         self.triangles = []
         self.match_rate = 0
         self.img = None
-        # self.pixels = []
 
     def init_p(self):
         pass
@@ -79,8 +77,7 @@ class Canvas(object):
         draw.polygon([(0, 0), (0, 255), (255, 255), (255, 0)], fill = (0, 0, 0, 0))
         for triangle in self.triangles:
             self.img = Image.alpha_composite(self.img, triangle.img_t or triangle.draw_it(self.size))
-        pixels = [self.img.getpixel((x, y)) for x in range(0, self.size_1[0], 2) for y in range(0, self.size_1[1], 2)]
-
+        pixels = [self.img.getpixel((x, y)) for x in range(0, self.size[0], 4) for y in range(0, self.size[1], 4)]
         for i in range(0, min(len(pixels), len(self.target_pixels))):
             delta_red   = pixels[i][0] - self.target_pixels[i][0]
             delta_green = pixels[i][1] - self.target_pixels[i][1]
@@ -90,16 +87,18 @@ class Canvas(object):
                                delta_blue  * delta_blue
 
     def draw_it(self, i):
-        self.img.save("/home/conplat/GA_engine/cc%d.png"%i)
+        self.img.save("/home/conplat/GA_engine/dd_%d_n%d_%d.png" % (i, len(self.triangles), int(self.mutate_rate * 100)))
 
 
 def main():
-    img_path = "/home/conplat/GA_engine/cc.png"
+    img_path = "/home/conplat/GA_engine/dd.png"
     img = Image.open(img_path).convert('RGBA')
-    target_img = [img.getpixel((x, y)) for x in range(0, 255, 2) for y in range(0, 255, 2)]
+    size = (256, 256)
+    size_1 = (255, 255)
+    target_img = [img.getpixel((x, y)) for x in range(0, size[0], 4) for y in range(0, size[1], 4)]
     Canvas.target_pixels = target_img
     parent = Canvas()
-    parent.add_triangles(40)
+    parent.add_triangles(200)
     i = 0
     while True:
         child = Canvas()
