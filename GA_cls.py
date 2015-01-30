@@ -11,10 +11,18 @@ class Color(object):
         self.r = r.randint(0, 255)
         self.g = r.randint(0, 255)
         self.b = r.randint(0, 255)
-        self.a = r.randint(90, 110)
+        self.a = r.randint(95, 115)
+
+
+def mutate_or_not(rate):
+    return True if rate > r.random() else False
 
 
 class Triangle(object):
+    max_mutate_rate = 0.1
+    mid_mutate_rate = 0.3
+    min_mutate_rate = 0.8
+
     def __init__(self, size=(255, 255)):
         self.ax = r.randint(0, size[0])
         self.ay = r.randint(0, size[1])
@@ -26,15 +34,53 @@ class Triangle(object):
         self.img_t = None
 
     def mutate_from(self, parent):
-        self.ax = min(max(0, parent.ax + r.randint(-15, 15)), 255)
-        self.ay = min(max(0, parent.ay + r.randint(-15, 15)), 255)
-        self.bx = min(max(0, parent.bx + r.randint(-15, 15)), 255)
-        self.by = min(max(0, parent.by + r.randint(-15, 15)), 255)
-        self.cx = min(max(0, parent.cx + r.randint(-15, 15)), 255)
-        self.cy = min(max(0, parent.cy + r.randint(-15, 15)), 255)
-        self.color.r = min(max(0, parent.color.r + r.randint(-20, 20)), 255)
-        self.color.g = min(max(0, parent.color.g + r.randint(-20, 20)), 255)
-        self.color.b = min(max(0, parent.color.b + r.randint(-20, 20)), 255)
+        if mutate_or_not(self.max_mutate_rate):
+            self.ax = r.randint(0, 255)
+            self.ay = r.randint(0, 255)
+        if mutate_or_not(self.mid_mutate_rate):
+            self.ax = min(max(0, parent.ax + r.randint(-20, 20)), 255)
+            self.ay = min(max(0, parent.ay + r.randint(-20, 20)), 255)
+        if mutate_or_not(self.min_mutate_rate):
+            self.ax = min(max(0, parent.ax + r.randint(-3, 3)), 255)
+            self.ay = min(max(0, parent.ay + r.randint(-3, 3)), 255)
+
+        if mutate_or_not(self.max_mutate_rate):
+            self.bx = r.randint(0, 255)
+            self.by = r.randint(0, 255)
+        if mutate_or_not(self.mid_mutate_rate):
+            self.bx = min(max(0, parent.bx + r.randint(-20, 20)), 255)
+            self.by = min(max(0, parent.by + r.randint(-20, 20)), 255)
+        if mutate_or_not(self.min_mutate_rate):
+            self.bx = min(max(0, parent.bx + r.randint(-3, 3)), 255)
+            self.by = min(max(0, parent.by + r.randint(-3, 3)), 255)
+
+        if mutate_or_not(self.max_mutate_rate):
+            self.cx = r.randint(0, 255)
+            self.cy = r.randint(0, 255)
+        if mutate_or_not(self.mid_mutate_rate):
+            self.cx = min(max(0, parent.cx + r.randint(-20, 20)), 255)
+            self.cy = min(max(0, parent.cy + r.randint(-20, 20)), 255)
+        if mutate_or_not(self.min_mutate_rate):
+            self.cx = min(max(0, parent.cx + r.randint(-3, 3)), 255)
+            self.cy = min(max(0, parent.cy + r.randint(-3, 3)), 255)
+
+        # self.bx = min(max(0, parent.bx + r.randint(-15, 15)), 255)
+        # self.by = min(max(0, parent.by + r.randint(-15, 15)), 255)
+        # self.cx = min(max(0, parent.cx + r.randint(-15, 15)), 255)
+        # self.cy = min(max(0, parent.cy + r.randint(-15, 15)), 255)
+
+        if mutate_or_not(self.mid_mutate_rate):
+            self.color.r = r.randint(0, 255)
+        if mutate_or_not(self.mid_mutate_rate):
+            self.color.g = r.randint(0, 255)
+        if mutate_or_not(self.mid_mutate_rate):
+            self.color.b = r.randint(0, 255)
+        if mutate_or_not(self.mid_mutate_rate):
+            self.color.a = r.randint(95, 115)
+
+        # self.color.r = min(max(0, parent.color.r + r.randint(-20, 20)), 255)
+        # self.color.g = min(max(0, parent.color.g + r.randint(-20, 20)), 255)
+        # self.color.b = min(max(0, parent.color.b + r.randint(-20, 20)), 255)
 
     def draw_it(self, size=(256, 256)):
         self.img_t = Image.new('RGBA', size)
@@ -46,12 +92,9 @@ class Triangle(object):
         return self.img_t
 
 
-def mutate_or_not(rate):
-    return True if rate > r.random() else False
-
-
 class Canvas(object):
-    mutate_rate = 0.02
+
+    mutate_rate = 0.01
     size = (256, 256)
     size_1 = (255, 255)
     target_pixels = []
@@ -110,7 +153,7 @@ class Canvas(object):
                                delta_blue  * delta_blue
 
     def draw_it(self, i):
-        self.img.save("/home/conplat/GA_engine/bb_%d_n%d_%d_128.png" % (i, len(self.triangles), int(self.mutate_rate * 100)))
+        self.img.save("/home/conplat/GA_engine/bb_%d_n%d_%d_1748.png" % (i, len(self.triangles), int(self.mutate_rate * 100)))
 
 
 def main():
@@ -121,7 +164,7 @@ def main():
     target_img = [img.getpixel((x, y)) for x in range(0, size[0], 2) for y in range(0, size[1], 2)]
     Canvas.target_pixels = target_img
     parent = Canvas()
-    parent.add_triangles(90)
+    parent.add_triangles(100)
     i = 0
     while True:
         child = Canvas()
