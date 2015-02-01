@@ -152,11 +152,11 @@ class Canvas(object):
                                delta_blue  * delta_blue
 
     def draw_it(self, i):
-        self.img.save("/Users/pike/CODES/GA_engine/bb_%d_n%d_%d_1748.png" % (i, len(self.triangles), int(self.mutate_rate * 100)))
+        self.img.save("/home/conplat/GA_engine/aa_%d_n%d_%d_1748.png" % (i, len(self.triangles), int(self.mutate_rate * 100)))
 
 
 def main():
-    img_path = "/Users/pike/CODES/GA_engine/bb.png"
+    img_path = "/home/conplat/GA_engine/aa.png"
     img = Image.open(img_path).resize((256, 256)).convert('RGBA')
     size = (256, 256)
     size_1 = (255, 255)
