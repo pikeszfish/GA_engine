@@ -47,4 +47,4 @@ GA_main,GA_main_thread,GA_RAW 都已经删除,在之前version里还有吧,正�
 3.取点密度,目前取256*256/4个点
 4.支持多种分辨率......之前测试的都是256*256的,没有试过其他的
 5.alpha?透明度的随机大小的合适值
-6.速度!速度!太慢了! 都是纯计算...在合成图片用了pillow(PIL)的接口alpha_composite最费时,试过用[numpy](http://stackoverflow.com/questions/3374878/with-the-python-imaging-library-pil-how-does-one-compose-an-image-with-an-alp)实现这个接口,不过更慢了。。。
+6.速度!速度!太慢了! 因为速度慢,放弃了很多...准备试试go,都是纯计算...在合成图片用了pillow(PIL)的接口alpha_composite最费时,试过用[numpy](http://stackoverflow.com/questions/3374878/with-the-python-imaging-library-pil-how-does-one-compose-an-image-with-an-alp)实现这个接口,不过更慢了...
