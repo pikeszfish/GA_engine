@@ -161,7 +161,6 @@ class Canvas(object):
                                delta_blue  * delta_blue
 
     def draw_it(self, i):
-        # self.img.save("/home/conplat/GA_engine/aa_%d_n%d_%d_1748.png" % (i, len(self.triangles), int(self.mutate_rate * 100)))
         self.img.save(os.path.join(PATH, "%s_%d_%d_%d.png"%(PREFIX, len(self.triangles), int(self.mutate_rate * 100), i)))
 
 
@@ -226,7 +225,7 @@ def main():
 
 
 LOOP = 1024
-PREFIX = "/home/conplat/GA_engine/aa.png".split('/')[-1].split('.')[0]
+PREFIX = "/User/pike/GA_engine/aa.png".split('/')[-1].split('.')[0]
 PATH = os.path.abspath('.')
 TARGET = "./aa.png"
 TRIANGLE_NUM = 100
