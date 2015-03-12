@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        input{
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div style="margin: 15px">
+    <select id="targetToSelect" onchange="changeSelect(this.value)">
+        <option value="chrome" selected="selected">chrome</option>
+        <option value="forbidden">forbidden</option>
+        <option value="soft">soft</option>
+        <option value="earth">earth</option>
+        <option value="bean">bean</option>
+        <option value="png">png</option>
+        <option value="ubuntu">ubuntu</option>
+        <option value="smile">smile</option>
+    </select>
+    <button onclick="start()">start!</button>
+    <button onclick="stop()">stop!</button>
+    <button onclick="pause()">pause!</button>
+</div>
+
+
+<div>
+    <canvas id="target" width="256" height="256" style="border:1px solid #d3d3d3;">
+        Shit happens! U need a better browser I think.
+    </canvas>
+    <canvas id="result" width="256" height="256" style="border:1px solid #d3d3d3;">
+        Shit happens! U need a better browser I think.
+    </canvas>
+</div>
+
+<div>
+    <p>canvas区域大小256*256, 三角形点和颜色的范围在0-255, 第一档的范围请勿设置过大. 透明度alpha设置范围0-1, 越小越透明.</p>
+    <p>建议越到后面第二档和第三档的概率和变动越小. 同时无论多小, 每一代后代至少会有一次变异,做了点dirtywork.</p>
+    三角形数量:<input id="triangleNum"  style="width:60px;" value="80" /><br/>
+    三角形的点有<input id="point_max_mutate_rate"  style="width:60px;" value="0.0008" />的概率发生&nbsp&nbsp<input id="point_max_rate_mutate_range_down"  style="width:60px;" value="0" />-<input id="point_max_rate_mutate_range_up"  style="width:60px;" value="255" />的变异<br/>
+    三角形的点有<input id="point_mid_mutate_rate"  style="width:60px;" value="0.003" />的概率发生±<input id="point_mid_rate_mutate_range"  style="width:60px;" value="10" />的变异<br/>
+    三角形的点有<input id="point_min_mutate_rate"  style="width:60px;" value="0.009" />的概率发生±<input id="point_min_rate_mutate_range"  style="width:60px;" value="5" />的变异<br/>
+
+    颜色有<input id="color_max_mutate_rate"  style="width:60px;" value="0.0008" />的概率发生&nbsp&nbsp<input id="color_max_rate_mutate_range_down"  style="width:60px;" value="0" />-<input id="color_max_rate_mutate_range_up"  style="width:60px;" value="255" />的变异<br/>
+    颜色有<input id="color_mid_mutate_rate"  style="width:60px;" value="0.003" />的概率发生±<input id="color_mid_rate_mutate_range"  style="width:60px;" value="10" />的变异<br/>
+    颜色有<input id="color_min_mutate_rate"  style="width:60px;" value="0.009" />的概率发生±<input id="color_min_rate_mutate_range"  style="width:60px;" value="5" />的变异<br/>
+
+    三角形透明度:<input id="color_alpha"  style="width:60px;" value="0.35" /><br/>
+    <button onclick="setIt()">setIt!</button>
+</div>
+<script src="{{ url_for('static', filename='js/GA_engine.js') }}"></script>
+
+
+</body>
+</html>
